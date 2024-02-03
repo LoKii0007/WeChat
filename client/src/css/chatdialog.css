@@ -1,0 +1,32 @@
+.chat-item{
+    width: 100%;
+}
+
+.chat-item:hover{
+    cursor: pointer;
+    background-color: rgb(255, 255, 255, .434);
+}
+
+.chat-profile img{
+    height: 40px;
+    width: fit-content;
+    border-radius: 50%;
+}
+
+.chat-name{
+    font-size: 2.5vh;
+    font-weight: 450;
+}
+.chat-data, .chat-time{
+    font-size: 2vh;
+    font-weight: 300;
+}
+
+.chat-info{
+    border-bottom: 1px solid black;
+    width: 100%;
+}
+
+.clicked{
+    background-color: rgb(255, 255, 255);
+}

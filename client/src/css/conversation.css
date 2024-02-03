@@ -1,0 +1,28 @@
+
+.conversation-box{
+    /* max-width: 90%; */
+    word-break: break-word;
+    max-width: fit-content;
+    max-width: 85%;
+    padding:0px 5px;
+}
+
+.sender{
+    background-color: aqua;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.reciever{
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: rgb(109, 231, 231);
+}
+
+.message-time{
+   bottom: 0%;
+   right: 0%;
+   transform: translateY(3px);
+   font-size: 10px;
+}

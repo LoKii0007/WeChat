@@ -1,0 +1,21 @@
+.drawer-profile img{
+    width: fit-content;
+    height: 250px;
+    border-radius: 50%;
+}
+
+.offcanvas{
+    background-color: antiquewhite !important;
+    width: 30% !important;
+    margin-top: 1% !important;
+    margin-left: 1% !important;
+}
+
+.drawer-header{
+    height: 15% !important;
+    background-color: rgb(255,255,255,0.434);
+}
+
+.heading-color{
+    color: rgb(18, 255, 65);
+}

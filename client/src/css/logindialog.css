@@ -1,0 +1,29 @@
+.header{
+    height: 200px;
+    width: 100%;
+    background-color: #0084a8;
+}
+
+body{
+    margin:0;
+    background-color: rgba(0, 0, 0, 0.851);
+}
+
+.conatiner{
+    position: fixed !important;
+    background-color: white;
+    height: 100%;
+    width: 66%;
+    top: 12%;
+    margin:0% 17%;
+}
+
+img{
+    height: fit-content;
+    width: 300px;
+    mix-blend-mode: multiply;
+}
+
+.login-box{
+    top: 45%;
+}

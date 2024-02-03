@@ -1,0 +1,62 @@
+body{
+    background-color: rgba(0, 0, 0, 0.071);
+    z-index: 110;
+}
+
+.chat-menu{
+    height: 710px;
+    width: 99%;
+    margin-top: 1%;
+    margin-left: 1%;
+    background-color: antiquewhite;
+    border-radius: 5px;
+}
+
+.chat-top{
+    background-color: rgba(255, 255, 255, 0.434);
+    border-bottom: 2px solid black;
+
+}
+
+.profile-img{
+    height: 40px;
+    width: fit-content;
+    border-radius: 50%;
+}
+
+.chats{
+    width: 30%;
+    border-right: 2px solid black;
+}
+
+.chat-display{
+    width: 70%;
+    background-color: antiquewhite;
+    height: 100%;
+}
+
+.chat-search{
+    background-color: antiquewhite;
+}
+
+.search{
+    width: 100%;
+    /* background-color: #202c33; */
+    background-color: white;
+    border-radius: 8px;
+}
+
+.chatmenu-form-control{
+    border: none !important;
+    /* background-color: #202c33; */
+
+}
+
+.all-chats{
+    background-color:antiquewhite;
+    /* border: 2px solid black; */
+}
+
+.icon:hover{
+    background-color: rgba(255, 255, 255);
+}

@@ -1,0 +1,8 @@
+.empty-chat-img img{
+    height: 200px;
+    width: fit-content;
+}
+
+.btn-success{
+    border-radius: 25px;
+}
