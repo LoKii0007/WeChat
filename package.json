@@ -1,0 +1,12 @@
+
+{
+    "name": "whatsapp",
+    "version": "1.0.0",
+    "scripts": {
+      "start": "concurrently \"npm run server\" \"npm run client\" \"npm run socket\" ",
+      "client": "cd client && npm start",
+      "server": "cd server && npm start",
+      "socket": "cd socket && npm start"
+    }
+  }
+  
