@@ -25,13 +25,13 @@ const Drawer = () => {
                         </div>
                         <div className="profile-info mt-4 mx-3">
                             <div className='mt-4 heading-color'>
-                                <h5>your name</h5>
+                                <h5>Your name</h5>
                             </div>
                             <div className="your-name mt-4">
                                 <h5>{account.name}</h5>
                             </div>
                             <div className='mt-4 heading-color'>
-                                <h5>about</h5>
+                                <h5>About</h5>
                             </div>
                             <div className="your-name mt-4">
                                 <h5>{account.name}</h5>

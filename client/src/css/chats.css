@@ -41,22 +41,14 @@ body{
 
 .search{
     width: 100%;
-    /* background-color: #202c33; */
     background-color: white;
     border-radius: 8px;
 }
 
 .chatmenu-form-control{
     border: none !important;
-    /* background-color: #202c33; */
-
 }
 
 .all-chats{
     background-color:antiquewhite;
-    /* border: 2px solid black; */
-}
-
-.icon:hover{
-    background-color: rgba(255, 255, 255);
 }

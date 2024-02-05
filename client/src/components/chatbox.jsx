@@ -25,7 +25,7 @@ const ChatBox = () => {
 
 
     const getMessageDetails = async ()=>{
-        if (conversation._id) {
+        if (conversation && conversation._id) {
             let message = await getMessage(conversation._id);
             if(message){
                 // const filteredData = message.filter(msg => msg.text.toLowerCase().includes(text.toLowerCase()))
@@ -39,13 +39,14 @@ const ChatBox = () => {
     }
 
     useEffect(()=>{
-        getMessageDetails()
-        window.scrollTo()
-    },[person._id, conversation._id])
+        if ((person && person._id ) || (conversation && conversation._id)) {
+            getMessageDetails();
+        }
+    },[person?._id, conversation?._id])
 
     useEffect(()=>{
         scrollRef.current?.scrollIntoView({transition:"smooth"})
-    },[messages])
+    },[messages, getMessageDetails])
 
 
     return (
@@ -67,11 +68,11 @@ const ChatBox = () => {
                         </div>
                     </div>
                     <div className="header-right d-flex flex-row ">
-                        <div className="header-search-icon icon mx-3 d-flex justify-content-center align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" /></svg>
+                        <div className="header-search-icon icon mx-3 py-1 px-2 d-flex justify-content-center align-items-center">
+                        <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
-                        <div className="header-ellipsis-icon icon mx-3 me-4 d-flex justify-content-center align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 128 512"><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" /></svg>
+                        <div className="header-ellipsis-icon icon py-1 px-2 me-4 d-flex justify-content-center align-items-center">
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
                         </div>
                     </div>
               </div>

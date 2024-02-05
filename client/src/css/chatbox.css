@@ -29,14 +29,11 @@
 .chatbox-body{
     height: 100%;
     width: 100%;
-    /* background-image: url('../../public/w-bg4.png'); */
-    background-color: #24242486;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
     scroll-margin-bottom: 100%;
+    background-color: #FFF6E9;
 }
 
 .chatbox-footer{
@@ -55,7 +52,24 @@
 }
 
 .icon:hover{
-    background-color: rgb(43, 155, 144);
-    border-radius: 3px;
     transition: .5s ease;
+    color: #40c8fa;
+}
+
+/* chatfooter-------------------- */
+
+.chatbox-input form {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.chatbox-form-control{
+    border: none !important;
+    border-radius: 10px !important;
+}
+
+chatbox-form-control:focus{
+    outline: none ;
+    border: none;
 }
