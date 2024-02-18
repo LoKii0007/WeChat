@@ -1,6 +1,7 @@
 import React, { useState, useContext }  from 'react'
 import AccountContext from '../context/accoountcontext'
-import { setConversation } from '../service/api'
+import { setConversation , getConversation} from '../service/api'
+import { formatDate } from '../utils/common'
 
 import "../css/chatdialog.css"
 import { useEffect } from 'react'
@@ -9,6 +10,8 @@ const ChatDialog = ({user}) => {
 
   const {setPerson , account} = useContext(AccountContext)
   const [clicked, setClicked] = useState(null)
+  const [message , setMessage] = useState({})
+  const [data, setdata] = useState({})
 
   const getUser = async ()=>{
     if (user.sub !== clicked) {
@@ -19,12 +22,25 @@ const ChatDialog = ({user}) => {
   }
 
   useEffect(()=>{
-    console.log(clicked)
+    const getConvoDetails = async()=>{
+      const convo = await getConversation({senderId:account.sub , recieverId : user.sub })
+      setdata(convo)
+      setMessage({
+        text:data?.message,
+        timestamp : data?.createdAt
+      })
+    }
+
+    getConvoDetails()
+
+  },[])
+
+  useEffect(()=>{
   }, [clicked])
 
   return (
     <>
-      <div onClick={()=>getUser()} className={`chat-item ${clicked !== user.sub ?"clicked": ""} d-flex flex-row align-items-center`}>
+      <div onClick={()=>getUser()} className={`chat-item ${clicked === user.sub ?"clicked": ""} d-flex flex-row align-items-center`}>
         <div className="chat-profile mx-2">
           <img src={user.picture} alt="" />
         </div>
@@ -34,12 +50,12 @@ const ChatDialog = ({user}) => {
               {user.name}
             </div>
             <div className="chat-time">
-              12:36
+              {message.timestamp ? formatDate(message.timestamp) : ""}
             </div>
           </div>
           <div className="info-bottom d-flex flex-row justify-content-between align-items-center">
             <div className="chat-data">
-              hemlo
+             {message.text ? message.text : "start chatting"}
             </div>
             <div className="unread-chat">
             </div>

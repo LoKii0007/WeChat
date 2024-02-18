@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { newMessage, uploadFile } from '../../service/api'
 import AccountContext from '../../context/accoountcontext'
 
-const ChatFooter = ({ conversation, onMessageSend, setMessages }) => {
+const ChatFooter = ({ conversation, onMessageSend, setMessages, messages }) => {
     const { account, person, socket } = useContext(AccountContext)
 
     const [text, setText] = useState("")
@@ -43,12 +43,12 @@ const ChatFooter = ({ conversation, onMessageSend, setMessages }) => {
         uploadImage()
     }, [image])
 
-    useEffect(()=>{
-    },[conversation])
+    useEffect(() => {
+    }, [conversation])
 
     const sendMessage = async () => {
         let message = {}
-        if(conversation && conversation._id){
+        if (conversation?._id) {
             if (!imageName) {
                 message = {
                     conversationId: conversation._id,
@@ -68,10 +68,12 @@ const ChatFooter = ({ conversation, onMessageSend, setMessages }) => {
             }
         }
 
-        socket.current.emit('newMessage', message)
-        if ((message.text && message.text.length > 0 )|| imageName) {
+        socket.current.emit('sendMessage', message)
+
+        if ((message.text && message.text.length > 0) || imageName) {
             await newMessage(message)
         }
+
         setText("")
         setImage("")
         setImageName("")
@@ -86,18 +88,28 @@ const ChatFooter = ({ conversation, onMessageSend, setMessages }) => {
     }
 
     useEffect(() => {
-        socket.current.on('onMessageSend', data => {
+        socket.current.on('getMessage', data => {
+            // console.log("incoming : ",data)
             setIncoming({
                 ...data,
                 createdAt: Date.now()
             })
         })
-    })
+
+    }, [socket])
 
     useEffect(() => {
-        incoming && conversation?.member?.includes(incoming.senderId) && setMessages(prev => [...prev, incoming])
-    }, [incoming, conversation])
+        // console.log("convo : ",conversation)
+        if (incoming && conversation?.member?.includes(incoming.senderId)) {
+            setMessages((prev) => {
+                const newState = [...prev, incoming];
+                console.log('New state:', newState);
+                return newState;
+            }
+            )
+        }
 
+    }, [incoming, conversation, messages])
 
 
     return (
@@ -106,12 +118,12 @@ const ChatFooter = ({ conversation, onMessageSend, setMessages }) => {
             <div className="chatbox-footer position-static py-2 d-flex flex-row align-items-center">
 
                 <div className='smile-icon icon py-1 mx-2 px-2 ms-3 d-flex justify-content-center align-items-center'>
-                <i class="fa-regular fa-face-smile"></i>
+                    <i class="fa-regular fa-face-smile"></i>
                 </div>
 
                 <label htmlFor="plus-icon">
                     <div className='plus-icon icon py-1 mx-2 px-2 d-flex justify-content-center align-items-center'>
-                    <i class="fa-solid fa-plus"></i>
+                        <i class="fa-solid fa-plus"></i>
                     </div>
                 </label>
                 <input id='plus-icon' type="file" style={{ display: "none" }} onChange={(e) => onFileChange(e)} />
@@ -120,13 +132,13 @@ const ChatFooter = ({ conversation, onMessageSend, setMessages }) => {
                     <form className="d-flex align-items-center">
                         <input onKeyDown={(e) => handleKeyDown(e)} onChange={(e) => onChange(e)} value={text} className="form-control chatbox-form-control me-2" type="text" placeholder="Type a message" />
                         <div onClick={() => sendMessage()} className='icon send-icon py-1 px-3' >
-                        <i class="fa-regular fa-paper-plane"></i>
-                    </div>
+                            <i class="fa-regular fa-paper-plane"></i>
+                        </div>
                     </form>
                 </div>
 
                 <div className='mic-icon icon py-1 px-2 me-4 d-flex justify-content-center align-items-center'>
-                <i class="fa-solid fa-microphone"></i>
+                    <i class="fa-solid fa-microphone"></i>
                 </div>
 
             </div>

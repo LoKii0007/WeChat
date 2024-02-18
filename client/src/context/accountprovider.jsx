@@ -16,7 +16,7 @@ const AccountProvider = (props) => {
   
   return (
     <>
-      <AccountContext.Provider value={{ account, setAccount, person, setPerson, socket, setActiveUsers }}>
+      <AccountContext.Provider value={{ account, setAccount, person, setPerson, socket,activeUsers ,  setActiveUsers }}>
         {props.children}
       </AccountContext.Provider>
 

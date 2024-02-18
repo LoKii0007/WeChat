@@ -3,7 +3,6 @@ const Message =   require("../models/message");
 const url = "http://localhost:8000";
 
 const uploadFile = async (request, response) => {
-  console.log(request.body)
   try {
     const imageName = request.file.filename;
     return response.status(200).json({message : "file uploaded to public/images : ", imageName});

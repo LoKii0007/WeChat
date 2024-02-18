@@ -1,7 +1,7 @@
 const User = require("../models/user.js")
 
 const addUser = async (request, response)=>{
-    console.log(request.body.sub)
+    // console.log(request.body.sub)
     try {
         let exist = await User.findOne({sub: request.body.sub})
 
@@ -13,7 +13,7 @@ const addUser = async (request, response)=>{
         const newUser = new User(request.body)
         await newUser.save()
 
-        console.log("added new user")
+        // console.log("added new user")
         return response.status(200).json(newUser)
 
     } catch (error) {

@@ -10,7 +10,6 @@ const ChatMenu = () => {
 
     const {account, setActiveUsers, socket} = useContext(AccountContext)
     const [text, setTetxt] = useState("")
-    // const [clickedUser, setClickedUser] = useState(null);
 
     const onchange = (e)=>{
         e.preventDefault()
