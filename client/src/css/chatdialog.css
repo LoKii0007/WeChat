@@ -1,10 +1,13 @@
 .chat-item{
     width: 100%;
+    transition: .4s ease;
 }
 
 .chat-item:hover{
     cursor: pointer;
-    background-color: rgb(255, 255, 255, .434);
+    background-color: rgb(255, 255, 255, .6);
+    transition: .4s ease;
+    border-radius: 12px;
 }
 
 .chat-profile img{
@@ -23,10 +26,15 @@
 }
 
 .chat-info{
-    border-bottom: 1px solid black;
     width: 100%;
 }
 
 .clicked{
-    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: .4s ease;
+    border-radius: 12px;
+}
+
+.clicked:hover{
+    transition: .4s ease;
 }

@@ -1,18 +1,26 @@
-import React, { useContext } from 'react'
+import React, { useContext} from 'react'
 import { GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from "jwt-decode"
 import AccountContext from '../context/accoountcontext'
 import { adduser } from '../service/api'
-
 import '../css/logindialog.css'
 
 const LoginDialog = () => {
 
-  const { setAccount } = useContext(AccountContext)
+  const {socket, setAccount} = useContext(AccountContext)
 
   const loginCredentials = async (res) => {
     const decoded = jwtDecode(res.credential)
     setAccount(decoded)
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({
+        type: 'addUser',
+        payload: decoded
+      }));
+      console.log('Message sent');
+    } else {
+      console.log('WebSocket is not open');
+    }
     await adduser(decoded)
   }
 

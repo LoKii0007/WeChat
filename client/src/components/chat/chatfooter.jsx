@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import { newMessage, uploadFile } from '../../service/api'
 import AccountContext from '../../context/accoountcontext'
 
-const ChatFooter = ({ conversation, onMessageSend, setMessages, messages }) => {
+const ChatFooter = ({ conversation, setMessages }) => {
+
     const { account, person, socket } = useContext(AccountContext)
 
     const [text, setText] = useState("")
     const [image, setImage] = useState("")
     const [imageName, setImageName] = useState("")
-    const [incoming, setIncoming] = useState(null)
 
     const onChange = (e) => {
         e.preventDefault()
@@ -68,16 +68,23 @@ const ChatFooter = ({ conversation, onMessageSend, setMessages, messages }) => {
             }
         }
 
-        socket.current.emit('sendMessage', message)
+        socket.send(JSON.stringify({
+            type : 'message_sent',
+            payload : {
+                sender : account.sub,
+                receiver : person.sub,
+                newMessage : message
+            }
+        }))
+
+        setMessages( prev => [...prev, message])
 
         if ((message.text && message.text.length > 0) || imageName) {
+            setText("")
+            setImage("")
+            setImageName("")
             await newMessage(message)
         }
-
-        setText("")
-        setImage("")
-        setImageName("")
-        onMessageSend()
     }
 
     const handleKeyDown = (e) => {
@@ -86,31 +93,6 @@ const ChatFooter = ({ conversation, onMessageSend, setMessages, messages }) => {
             sendMessage()
         }
     }
-
-    useEffect(() => {
-        socket.current.on('getMessage', data => {
-            // console.log("incoming : ",data)
-            setIncoming({
-                ...data,
-                createdAt: Date.now()
-            })
-        })
-
-    }, [socket])
-
-    useEffect(() => {
-        // console.log("convo : ",conversation)
-        if (incoming && conversation?.member?.includes(incoming.senderId)) {
-            setMessages((prev) => {
-                const newState = [...prev, incoming];
-                console.log('New state:', newState);
-                return newState;
-            }
-            )
-        }
-
-    }, [incoming, conversation, messages])
-
 
     return (
         <>

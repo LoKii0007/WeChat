@@ -7,52 +7,64 @@ import AccountContext from '../context/accoountcontext'
 
 const ChatMenu = () => {
     const [users, setUsers] = useState([])
-
-    const {account, setActiveUsers, socket} = useContext(AccountContext)
+    const { account, activeUsers, setActiveUsers, socket } = useContext(AccountContext)
     const [text, setTetxt] = useState("")
 
-    const onchange = (e)=>{
+    const onchange = (e) => {
         e.preventDefault()
         setTetxt(e.target.value)
     }
 
     useEffect(() => {
-      const fetchdata = async () => {
-        try {
-          let response = await getUsers()
-          if(response){
-            const filteredData = response.filter(user => user.name.toLowerCase().includes(text.toLowerCase()))
-            setUsers(filteredData)
-          }else{
-            console.log("invalid response", response )
-          }
+        const fetchdata = async () => {
+            try {
+                let response = await getUsers()
+                if (response) {
+                    const filteredData = response.filter(user => user.name.toLowerCase().includes(text.toLowerCase()))
+                    setUsers(filteredData)
+                } else {
+                    console.log("invalid response", response)
+                }
+            }
+            catch (error) {
+                console.log("error ", error)
+            }
         }
-        catch (error) {
-          console.log("error ", error)
-        }
-      }
-  
-      fetchdata()
+
+        fetchdata()
     }, [text])
-  
-    useEffect(()=>{
-        socket.current.emit("addUsers", account)
-        socket.current.on("getUsers", users=>{
-            setActiveUsers(users)
-        })
-    },[account])
-  
+
+    useEffect(() => {
+
+        if (!socket) {
+            return
+        }
+
+        socket.onmessage = (event) => {
+            const message = JSON.parse(event.data)
+            console.log('payload', message.payload)
+
+            if (message.type === 'activeUsers') {
+                setActiveUsers(message.payload)
+                console.log('active users : ', activeUsers)
+            }
+        }
+
+    }, [])
+
     const handleEllipsis = () => {
-  
+
     }
+
+
     return (
         <>
 
-            <div className="chats">
+            <div className="chats d-flex flex-column align-items-center">
 
                 {/* --------------chat header------------- */}
 
-                <div className="chat-top d-flex flex-row py-2 justify-content-between align-items-center ">
+                <div className="chat-top d-flex flex-row py-1 justify-content-between align-items-center ">
                     <div className="chat-top-left ms-3">
                         <Drawer />
                     </div>
@@ -68,28 +80,23 @@ const ChatMenu = () => {
 
                 {/* --------------chat-search---------------- */}
 
-                <div className="chat-search px-2 pt-2 d-flex flex-row align-items-center">
-                    <div className="search position-relative">
-                        <form className="d-flex align-items-center" role="search">
-                            <div className="search-icon ms-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" /></svg>
-                            </div>
-                            <input onChange={(e)=>onchange(e)} value={text} className="form-control chatmenu-form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                        </form>
-                    </div>
-                    {/* <div className="filter mx-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z" /></svg>
-                    </div> */}
+                <div className="chat-search d-flex flex-row align-items-center justify-content-center">
+                    <form className="d-flex search-form align-items-center" role="search">
+                        <div className="search-icon ms-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" /></svg>
+                        </div>
+                        <input onChange={(e) => onchange(e)} value={text} className="form-control chatmenu-form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                    </form>
                 </div>
 
                 {/* ----------------all chats-------------- */}
 
-                <div className="all-chats pt-2 px-2 position-relative">
+                <div className="all-chats pt-2 position-relative">
 
-                    { users && users.length >0 ?
+                    {users && users.length > 0 &&
                         users.map(user => {
-                            return ((account.sub!== user.sub) && <ChatDialog key={user._id} user={user} />)
-                        }) : ""
+                            return ((account.sub !== user.sub) && <ChatDialog key={user._id} user={user} />)
+                        })
                     }
                 </div>
             </div>

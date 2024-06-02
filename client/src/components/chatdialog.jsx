@@ -1,23 +1,19 @@
-import React, { useState, useContext }  from 'react'
+import React, { useState, useContext,useEffect }  from 'react'
 import AccountContext from '../context/accoountcontext'
 import { setConversation , getConversation} from '../service/api'
 import { formatDate } from '../utils/common'
-
 import "../css/chatdialog.css"
-import { useEffect } from 'react'
 
 const ChatDialog = ({user}) => {
 
-  const {setPerson , account} = useContext(AccountContext)
-  const [clicked, setClicked] = useState(null)
+  const {setPerson , account, person} = useContext(AccountContext)
+  const [clicked, setClicked] = useState("")
   const [message , setMessage] = useState({})
   const [data, setdata] = useState({})
 
   const getUser = async ()=>{
-    if (user.sub !== clicked) {
-      setClicked(user.sub);
-    }
     setPerson(user)
+    setClicked(user.sub)
     await setConversation({senderId:account.sub, recieverId:user.sub})
   }
 
@@ -35,12 +31,9 @@ const ChatDialog = ({user}) => {
 
   },[])
 
-  useEffect(()=>{
-  }, [clicked])
-
   return (
     <>
-      <div onClick={()=>getUser()} className={`chat-item ${clicked === user.sub ?"clicked": ""} d-flex flex-row align-items-center`}>
+      <div onClick={()=>getUser() } className={`${clicked === person.sub && 'clicked' } chat-item d-flex flex-row align-items-center`}>
         <div className="chat-profile mx-2">
           <img src={user.picture} alt="" />
         </div>

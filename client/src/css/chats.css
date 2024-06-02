@@ -14,8 +14,10 @@ body{
 
 .chat-top{
     background-color: rgba(255, 255, 255, 0.434);
-    border-bottom: 2px solid black;
-
+    margin:8px 0px;
+    border-radius: 12px;
+    width: 95%;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 10px;
 }
 
 .profile-img{
@@ -26,7 +28,6 @@ body{
 
 .chats{
     width: 30%;
-    border-right: 2px solid black;
 }
 
 .chat-display{
@@ -36,19 +37,26 @@ body{
 }
 
 .chat-search{
-    background-color: antiquewhite;
-}
-
-.search{
-    width: 100%;
+    width: 95%;
     background-color: white;
-    border-radius: 8px;
+    border-radius: 12px;
+    height: 50px;
 }
 
-.chatmenu-form-control{
+.chatmenu-form-control, .search-form{
     border: none !important;
+    width: 100%;
+}
+
+.form-control:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #0a2246;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .all-chats{
     background-color:antiquewhite;
+    width: 95%;
 }

@@ -1,7 +1,7 @@
 import axios from "axios"
 
-// const url = "http://localhost:8000"
-const url = "https://we-chat-ten.vercel.app"
+const url = "http://localhost:8000"
+// const url = "https://we-chat-ten.vercel.app"
 
 export const adduser = async(data) =>{
     try{
