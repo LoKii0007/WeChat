@@ -64,7 +64,7 @@ const ChatMenu = () => {
 
                 {/* --------------chat header------------- */}
 
-                <div className="chat-top d-flex flex-row py-1 justify-content-between align-items-center ">
+                <div className="chat-top d-flex flex-row py-2 justify-content-between align-items-center ">
                     <div className="chat-top-left ms-3">
                         <Drawer />
                     </div>
@@ -91,12 +91,12 @@ const ChatMenu = () => {
 
                 {/* ----------------all chats-------------- */}
 
-                <div className="all-chats pt-2 position-relative">
+                <div className="all-chats pt-2 d-flex flex-column align-items-center">
 
-                    {users && users.length > 0 &&
+                    {users && users.length > 0 ?
                         users.map(user => {
                             return ((account.sub !== user.sub) && <ChatDialog key={user._id} user={user} />)
-                        })
+                        }) : 'loading...'
                     }
                 </div>
             </div>

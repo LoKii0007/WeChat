@@ -68,7 +68,7 @@ const ChatBox = () => {
         <>
             <div className="chat-box d-flex flex-column align-items-center position-relative" id='chat-box'>
 
-                <div className="chatbox-header position-absolute my-2 py-2 d-flex flex-row justify-content-between align-items-center">
+                <div className="chatbox-header position-absolute py-2 d-flex flex-row justify-content-between align-items-center">
                     <div className="header-left d-flex flex-row justify-content-center align-items-center">
                         <div className="header-img mx-2 ms-4">
                             <img src={person.picture} alt="" />

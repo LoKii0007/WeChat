@@ -1,5 +1,5 @@
 .chat-item{
-    width: 100%;
+    width: 95%;
     transition: .4s ease;
 }
 
@@ -7,7 +7,6 @@
     cursor: pointer;
     background-color: rgb(255, 255, 255, .6);
     transition: .4s ease;
-    border-radius: 12px;
 }
 
 .chat-profile img{
@@ -32,7 +31,8 @@
 .clicked{
     background-color: rgba(255, 255, 255, 0.5);
     transition: .4s ease;
-    border-radius: 12px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 10px;
+    width: 100%;
 }
 
 .clicked:hover{

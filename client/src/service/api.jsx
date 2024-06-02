@@ -1,7 +1,7 @@
 import axios from "axios"
 
-// const url = "http://localhost:8000"
-const url = "https://we-chat-ten.vercel.app"
+const url = "http://localhost:8000"
+// const url = "https://we-chat-ten.vercel.app"
 
 export const adduser = async(data) =>{
     try{
@@ -73,5 +73,17 @@ export const uploadFile = async (data) =>{
     } catch (error) {
         console.log("error calling uploadfile api", error.message)
     }
+}
 
+export const cloudinaryUpload = async(data)=>{
+    try {
+        let res = await axios.post(`${url}/file/cloudinaryUpload`, data)
+        if(res.status === 200){
+            return res.data
+        }else{
+            console.log('invalid reposnse', res.data)
+        }
+    } catch (error) {
+        console.log('error calling cloudinary api', error)
+    }
 }
