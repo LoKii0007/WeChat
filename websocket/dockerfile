@@ -1,0 +1,15 @@
+FROM node:20
+
+WORKDIR /app
+
+COPY package* .
+
+# RUN corepack pnpm
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 8080
+
+CMD ["node", "index.js"]
