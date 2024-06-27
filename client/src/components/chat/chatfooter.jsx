@@ -110,9 +110,9 @@ const ChatFooter = ({ conversation, setMessages }) => {
                 </label>
                 <input id='plus-icon' type="file" style={{ display: "none" }} onChange={(e) => onFileChange(e)} />
 
-                <div className='chatbox-input mx-2'>
-                    <form className="d-flex align-items-center">
-                        <input onKeyDown={(e) => handleKeyDown(e)} onChange={(e) => onChange(e)} value={text} className="form-control chatbox-form-control me-2" type="text" placeholder="Type a message" />
+                <div className='chatbox-input mx-2 rounded-pill'>
+                    <form className="d-flex align-items-center rounded-pill">
+                        <input onKeyDown={(e) => handleKeyDown(e)} onChange={(e) => onChange(e)} value={text} className="form-control chatbox-form-control rounded-pill me-2" type="text" placeholder="Type a message" />
                         <div onClick={() => sendMessage()} className='icon send-icon py-1 px-3' >
                             <i class="fa-regular fa-paper-plane"></i>
                         </div>

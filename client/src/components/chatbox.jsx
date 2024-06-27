@@ -10,17 +10,18 @@ const ChatBox = () => {
     const { account, person, activeUsers, socket } = useContext(AccountContext)
     const [messages, setMessages] = useState([])
     const [conversation, setConversation] = useState({})
+    const [msgLoading, setMsgLoading]=useState(false)
     const scrollRef = useRef()
 
 
     useEffect(() => {
         const getConvoDetails = async () => {
+            setMsgLoading(true)
             let data = await getConversation({ senderId: account.sub, recieverId: person.sub })
             setConversation(data)
         }
         getConvoDetails()
     }, [person.sub])
-
 
     const getMessageDetails = async () => {
         if (conversation && conversation._id) {
@@ -29,6 +30,7 @@ const ChatBox = () => {
                 // const filteredData = message.filter(msg => msg.text.toLowerCase().includes(text.toLowerCase()))
                 // setMessages(filteredData);
                 setMessages(message)
+                setMsgLoading(false)
             }
             else {
                 console.log("no messages")
@@ -37,10 +39,10 @@ const ChatBox = () => {
     }
 
     useEffect(() => {
-        if ((person && person._id) || (conversation && conversation._id)) {
+        if (conversation && conversation._id) {
             getMessageDetails();
         }
-    }, [person?._id, conversation?._id])
+    }, [conversation?._id])
 
     useEffect(()=>{
         if(!socket){
@@ -63,6 +65,25 @@ const ChatBox = () => {
     useEffect(()=>{
     }, [activeUsers])
 
+    const [mobile, setMobile]= useState(false)
+    function responsive(){
+      if(window.innerWidth>600){
+        setMobile(false)
+      }else{
+        setMobile(true)
+      }
+    }
+  
+    useEffect(()=>{
+      responsive()
+  
+      window.addEventListener('resize', responsive)
+    
+      return()=>{
+        window.removeEventListener('resize', responsive)
+      }
+    }, [])
+
 
     return (
         <>
@@ -70,6 +91,8 @@ const ChatBox = () => {
 
                 <div className="chatbox-header position-absolute py-2 d-flex flex-row justify-content-between align-items-center">
                     <div className="header-left d-flex flex-row justify-content-center align-items-center">
+                        {mobile && <i className="fa-solid fa-arrow-left p-2 ps-3" data-bs-dismiss="offcanvas" aria-label="Close" ></i>}
+                        
                         <div className="header-img mx-2 ms-4">
                             <img src={person.picture} alt="" />
                         </div>
@@ -86,20 +109,21 @@ const ChatBox = () => {
                         <div className="header-search-icon icon mx-3 py-1 px-2 d-flex justify-content-center align-items-center">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
-                        <div className="header-ellipsis-icon icon py-1 px-2 me-4 d-flex justify-content-center align-items-center">
+                        <div className="header-ellipsis-icon icon py-1 px-2 pe-4 d-flex justify-content-center align-items-center">
                             <i className="fa-solid fa-ellipsis-vertical"></i>
                         </div>
                     </div>
                 </div>
 
-                <div className=" chatbox-body">
+                <div className="chatbox-body">
                     <div className='mt-auto mb-1'>
-                        {
-                            messages && messages.length > 0 ? messages.map((message, index) => (
+                        { msgLoading ?
+                         <div className='loading-msg' >loading messages...</div> :
+                            (messages && messages.length > 0 ? messages.map((message, index) => (
                                 <div key={index} ref={scrollRef}>
                                     <Conversation message={message} />
                                 </div>
-                            )) : ""
+                            )) : "")
                         }
                     </div>
                 </div>

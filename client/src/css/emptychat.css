@@ -6,3 +6,9 @@
 .btn-success{
     border-radius: 25px;
 }
+
+@media screen and (max-width:600px) {
+    .chat-display{
+        display: none !important;
+    }
+}

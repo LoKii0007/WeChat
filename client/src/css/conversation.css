@@ -37,3 +37,13 @@
     color: white;
     cursor: default;
 }
+
+@media screen and (max-width:600px){
+    .sender, .receiver{
+        padding-top: 0% !important;
+    }
+    .conversation-box{
+        padding: 0% !important;
+        padding-top: 4px !important;
+    }
+}

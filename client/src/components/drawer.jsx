@@ -25,16 +25,10 @@ const Drawer = () => {
                         </div>
                         <div className="profile-info mt-4 mx-3">
                             <div className='mt-4 heading-color'>
-                                <h5>Your name</h5>
-                            </div>
-                            <div className="your-name mt-4">
-                                <h5>{account.name}</h5>
+                                <h5>Your name <span style={{color:"blue"}} >{account.name}</span></h5>
                             </div>
                             <div className='mt-4 heading-color'>
-                                <h5>About</h5>
-                            </div>
-                            <div className="your-name mt-4">
-                                <h5>{account.name}</h5>
+                                <h6>About <span style={{color:"blue"}} >{account.name}</span></h6>
                             </div>
                         </div>
 

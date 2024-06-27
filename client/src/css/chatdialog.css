@@ -38,3 +38,15 @@
 .clicked:hover{
     transition: .4s ease;
 }
+
+@media screen and (max-width:600px) {
+    .offcanvas{
+        width: 100% !important;
+        margin: 0% !important;
+    }
+    .mobile-chatbox{
+        width: 100vw !important;
+        margin: 0% !important;
+    }
+
+}

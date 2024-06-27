@@ -33,7 +33,7 @@
 .chatbox-body{
     z-index: 90;
     height: 100%;
-    width: 100%;
+    width: 98%;
     overflow-y: scroll;
     scrollbar-width: none;
     display: flex;
@@ -77,11 +77,47 @@
 
 .chatbox-form-control{
     border: none !important;
-    border-radius: 10px !important;
     height: 45px;
 }
 
 chatbox-form-control:focus{
-    outline: none ;
-    border: none;
+    outline: 0px !important;
+    border: 0px !important;
+}
+
+.loading-msg{
+    text-align: center;
+}
+
+@media screen and (max-width:600px) {
+    .chat-box{
+        width: 100% !important;
+        height: 100% !important;
+    }
+    .chatbox-header{
+        margin-top: 0%;
+        width: 100%;
+        border-top-left-radius: 0%;
+        border-top-right-radius: 0%;
+    }
+    .chatbox-body{
+        width: 100%;
+    }
+    .chatbox-footer{
+        width: 100%;
+        margin-bottom: 0%;
+        border-radius: 0%;
+    }
+    .header-img{
+        margin: 8px !important;
+    }
+    .fa-arrow-left, .fa-ellipsis-vertical{
+        font-size: 20px;
+    }
+    .header-ellipsis{
+        padding-right: 16px !important;
+    }
+    .chatbox-body{
+        padding: 0px 8px ;
+    }
 }
