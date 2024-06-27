@@ -20,7 +20,7 @@
 }
 
 .header-search-icon, .mic-icon, .plus-icon, .smile-icon{
-    scale: 1.5;
+    font-size: 20px;
 }
 
 .header-profile-status{
@@ -69,6 +69,10 @@
 
 /* chatfooter-------------------- */
 
+.chatbox-footer{
+    background-color: white;
+}
+
 .chatbox-input form {
     width: 100%;
     background-color: white;
@@ -87,6 +91,11 @@ chatbox-form-control:focus{
 
 .loading-msg{
     text-align: center;
+}
+
+.send-icon{
+    /* background-color: #A1EEBD; */
+    font-size: 20px;
 }
 
 @media screen and (max-width:600px) {

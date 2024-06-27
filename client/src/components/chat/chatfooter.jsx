@@ -5,10 +5,28 @@ import AccountContext from '../../context/accoountcontext'
 const ChatFooter = ({ conversation, setMessages }) => {
 
     const { account, person, socket } = useContext(AccountContext)
-
     const [text, setText] = useState("")
     const [image, setImage] = useState("")
     const [imageName, setImageName] = useState("")
+    const [mobile, setMobile]= useState(false)
+
+    function responsive(){
+      if(window.innerWidth>600){
+        setMobile(false)
+      }else{
+        setMobile(true)
+      }
+    }
+  
+    useEffect(()=>{
+      responsive()
+  
+      window.addEventListener('resize', responsive)
+    
+      return()=>{
+        window.removeEventListener('resize', responsive)
+      }
+    }, [])
 
     const onChange = (e) => {
         e.preventDefault()
@@ -69,15 +87,15 @@ const ChatFooter = ({ conversation, setMessages }) => {
         }
 
         socket.send(JSON.stringify({
-            type : 'message_sent',
-            payload : {
-                sender : account.sub,
-                receiver : person.sub,
-                newMessage : message
+            type: 'message_sent',
+            payload: {
+                sender: account.sub,
+                receiver: person.sub,
+                newMessage: message
             }
         }))
 
-        setMessages( prev => [...prev, message])
+        setMessages(prev => [...prev, message])
 
         if ((message.text && message.text.length > 0) || imageName) {
             setText("")
@@ -99,12 +117,14 @@ const ChatFooter = ({ conversation, setMessages }) => {
             {image && <img src={URL.createObjectURL(image)} />}
             <div className="chatbox-footer position-static py-2 d-flex flex-row align-items-center">
 
-                <div className='smile-icon icon py-1 mx-2 px-2 ms-3 d-flex justify-content-center align-items-center'>
-                    <i class="fa-regular fa-face-smile"></i>
-                </div>
+                {!mobile &&
+                    <div className='smile-icon icon py-1 mx-2 px-2 ms-3 d-flex justify-content-center align-items-center'>
+                        <i class="fa-regular fa-face-smile"></i>
+                    </div>
+                }
 
                 <label htmlFor="plus-icon">
-                    <div className='plus-icon icon py-1 mx-2 px-2 d-flex justify-content-center align-items-center'>
+                    <div className='plus-icon icon ms-2 p-2 d-flex justify-content-center align-items-center'>
                         <i class="fa-solid fa-plus"></i>
                     </div>
                 </label>
@@ -113,15 +133,17 @@ const ChatFooter = ({ conversation, setMessages }) => {
                 <div className='chatbox-input mx-2 rounded-pill'>
                     <form className="d-flex align-items-center rounded-pill">
                         <input onKeyDown={(e) => handleKeyDown(e)} onChange={(e) => onChange(e)} value={text} className="form-control chatbox-form-control rounded-pill me-2" type="text" placeholder="Type a message" />
-                        <div onClick={() => sendMessage()} className='icon send-icon py-1 px-3' >
+                        <div onClick={() => sendMessage()} className='icon send-icon rounded-circle py-1 px-3' >
                             <i class="fa-regular fa-paper-plane"></i>
                         </div>
                     </form>
                 </div>
 
-                <div className='mic-icon icon py-1 px-2 me-4 d-flex justify-content-center align-items-center'>
-                    <i class="fa-solid fa-microphone"></i>
-                </div>
+                {!mobile &&
+                    <div className='mic-icon icon py-1 px-2 me-4 d-flex justify-content-center align-items-center'>
+                        <i class="fa-solid fa-microphone"></i>
+                    </div>
+                }
 
             </div>
         </>
