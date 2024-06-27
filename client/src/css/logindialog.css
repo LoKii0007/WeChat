@@ -19,7 +19,6 @@ body{
 }
 
 img{
-    height: fit-content;
     width: 300px;
     mix-blend-mode: multiply;
 }
