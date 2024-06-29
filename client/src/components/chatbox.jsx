@@ -7,7 +7,7 @@ import "../css/chatbox.css"
 
 const ChatBox = () => {
 
-    const { account, person, activeUsers, socket } = useContext(AccountContext)
+    const { account, person, activeUsers, socket, setActiveUsers } = useContext(AccountContext)
     const [messages, setMessages] = useState([])
     const [conversation, setConversation] = useState({})
     const [msgLoading, setMsgLoading]=useState(false)
@@ -55,15 +55,17 @@ const ChatBox = () => {
                 console.log('recieved :', data.payload)
                 setMessages(prevMessages => [...prevMessages, data.payload.newMessage])
             }
+            if (data.type === 'activeUsers') {
+                console.log(data.payload.length)
+                setActiveUsers(data.payload)
+                console.log('active users : ', activeUsers)
+            }
         }
-    }, [socket])
+    }, [socket, setActiveUsers])
 
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [messages, getMessageDetails])
-
-    useEffect(()=>{
-    }, [activeUsers])
 
     const [mobile, setMobile]= useState(false)
     function responsive(){
@@ -76,9 +78,7 @@ const ChatBox = () => {
   
     useEffect(()=>{
       responsive()
-  
       window.addEventListener('resize', responsive)
-    
       return()=>{
         window.removeEventListener('resize', responsive)
       }

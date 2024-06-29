@@ -1,7 +1,7 @@
 import axios from "axios"
 
-// const url = "http://localhost:8000"
-const url = "https://we-chat-ten.vercel.app"
+const url = "http://localhost:8000"
+// const url = "https://we-chat-ten.vercel.app"
 
 export const adduser = async(data) =>{
     try{
@@ -27,6 +27,7 @@ export const getUsers = async() =>{
 export const setConversation = async(data)=>{
     try {
         let response = await axios.post(`${url}/conversation/c-add`, data)
+        console.log(response)
         return response.data
     } catch (error) {
         console.log("error calling setconversation api", error.message)
@@ -41,6 +42,17 @@ export const getConversation = async(data)=>{
         console.log("error calling getconversation api", error.message)
     }
 }
+
+
+export const UpdateConversation = async(data)=>{
+    try {
+        let response = await axios.patch(`${url}/conversation/update`, data)
+        return response.data
+    } catch (error) {
+        console.log("error calling updateconversation api", error.message)
+    }
+}
+
 
 export const newMessage = async(data)=>{
     try {

@@ -28,6 +28,21 @@ body{
     border-right: 1px solid rgba(128, 128, 128, 0.3);
     max-height: 100%;
     min-height: 100vh;
+    overflow-y: scroll;
+}
+
+.chats::-webkit-scrollbar {
+    width: 4px
+}
+
+.chats::-webkit-scrollbar-track {
+    background: #f1f1f1; /* color of the track */
+    border-radius: 10px;
+}
+
+.chats::-webkit-scrollbar-thumb {
+    background-color: #888; 
+    border-radius: 10px;
 }
 
 .chat-display{

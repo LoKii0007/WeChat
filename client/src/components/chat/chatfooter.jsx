@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { newMessage, uploadFile } from '../../service/api'
+import { UpdateConversation, newMessage, uploadFile } from '../../service/api'
 import AccountContext from '../../context/accoountcontext'
 
 const ChatFooter = ({ conversation, setMessages }) => {
 
-    const { account, person, socket } = useContext(AccountContext)
+    const { account, person, socket , setRecenetMessage} = useContext(AccountContext)
     const [text, setText] = useState("")
     const [image, setImage] = useState("")
     const [imageName, setImageName] = useState("")
@@ -102,6 +102,11 @@ const ChatFooter = ({ conversation, setMessages }) => {
             setImage("")
             setImageName("")
             await newMessage(message)
+            const res = await UpdateConversation({senderId: account.sub, recieverId: person.sub, message : message.text})
+            console.log(res)
+            if(res!= undefined){
+                setRecenetMessage(res)
+            }
         }
     }
 

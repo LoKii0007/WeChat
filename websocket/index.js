@@ -31,7 +31,9 @@ wss.on("connection", function connection(ws) {
     }
 
     if(message.type === 'message_sent'){
+    
       const receiver = activeUsers.find(user => user.person.sub === message.payload.receiver)
+      console.log(receiver.person.email)
 
       if(receiver){
         receiver.socket.send(JSON.stringify({

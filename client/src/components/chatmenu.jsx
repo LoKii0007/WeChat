@@ -7,7 +7,7 @@ import AccountContext from '../context/accoountcontext'
 
 const ChatMenu = () => {
     const [users, setUsers] = useState([])
-    const { account, activeUsers, setActiveUsers, socket } = useContext(AccountContext)
+    const { account, activeUsers, setActiveUsers, socket} = useContext(AccountContext)
     const [text, setTetxt] = useState("")
 
     const onchange = (e) => {
@@ -39,18 +39,15 @@ const ChatMenu = () => {
         if (!socket) {
             return
         }
-
         socket.onmessage = (event) => {
             const message = JSON.parse(event.data)
-            console.log('payload', message.payload)
-
             if (message.type === 'activeUsers') {
                 setActiveUsers(message.payload)
-                console.log('active users : ', activeUsers)
+                console.log('active users : ', activeUsers.length)
             }
         }
 
-    }, [])
+    }, [activeUsers])
 
     const handleEllipsis = () => {
 

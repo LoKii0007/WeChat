@@ -7,55 +7,75 @@ import ChatBox from './chatbox'
 
 const ChatDialog = ({ user }) => {
 
-  const { setPerson, account, person } = useContext(AccountContext)
+  const { setPerson, account, person, socket, recentMessage } = useContext(AccountContext)
   const [clicked, setClicked] = useState("")
   const [message, setMessage] = useState({})
-  const [data, setdata] = useState({})
+  const [newconvo, setNewConvo] = useState()
 
   const getUser = async () => {
     setPerson(user)
     setClicked(user.sub)
-    await setConversation({ senderId: account.sub, recieverId: user.sub })
+    const res = await setConversation({ senderId: account.sub, recieverId: user.sub })
+    if (res.status) {
+      setNewConvo(res.message)
+    }
+  }
+
+  const getConvoDetails = async () => {
+    const convo = await getConversation({ senderId: account.sub, recieverId: user.sub })
+    setMessage({
+      text: convo?.message,
+      timestamp: convo?.createdAt
+    })
   }
 
   useEffect(() => {
-    const getConvoDetails = async () => {
-      const convo = await getConversation({ senderId: account.sub, recieverId: user.sub })
-      setdata(convo)
-      setMessage({
-        text: data?.message,
-        timestamp: data?.createdAt
-      })
-    }
-
     getConvoDetails()
+    console.log(message)
+  }, [newconvo, recentMessage])
 
-  }, [])
-
-  const [mobile, setMobile]= useState(false)
-  function responsive(){
-    if(window.innerWidth>600){
+  // reponsiveness
+  const [mobile, setMobile] = useState(false)
+  function responsive() {
+    if (window.innerWidth > 600) {
       setMobile(false)
-    }else{
+    } else {
       setMobile(true)
     }
   }
-
-  useEffect(()=>{
+  useEffect(() => {
     responsive()
     window.addEventListener('resize', responsive)
-    return()=>{
+    return () => {
       window.removeEventListener('resize', responsive)
     }
   }, [])
 
+  //socket
+  useEffect(() => {
+    if (!socket) {
+      return
+    }
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      if (data.type === 'update_receiver') {
+        console.log('recieved :', data.payload)
+        getConvoDetails()
+      }
+    }
+  }, [socket])
+
+  useEffect(() => {
+    console.log(message)
+  }, [message])
+
   return (
     <>
-      <div onClick={() => getUser()} 
+      <div onClick={() => getUser()}
         className={`${clicked === person.sub && 'clicked'} chat-item d-flex flex-row align-items-center`}
-        data-bs-toggle={mobile?"offcanvas":''} 
-        data-bs-target={mobile?"#offcanvasExample":''}
-        aria-controls={mobile?"offcanvasExample":''}
+        data-bs-toggle={mobile ? "offcanvas" : ''}
+        data-bs-target={mobile ? "#offcanvasExample" : ''}
+        aria-controls={mobile ? "offcanvasExample" : ''}
       >
         <div className="chat-profile mx-2">
           <img src={user.picture} alt="" />
@@ -79,11 +99,8 @@ const ChatDialog = ({ user }) => {
         </div>
       </div>
 
-
-      {/* offcanvas  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>  */}
-
       <div className="offcanvas offcanvas-start mobile-chatbox offcanvas-sm" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-          <ChatBox/>
+        <ChatBox />
       </div>
 
     </>

@@ -1,6 +1,6 @@
 const express = require("express")
 const {addUser, getUser} = require("../controller/user.js")
-const {newConversation, getConversation}  = require("../controller/conversation.js")
+const {newConversation, getConversation, updateConversation}  = require("../controller/conversation.js")
 const { newMessage, getMessage } = require("../controller/message.js")
 const { uploadFile, getImage, cloudinaryUpload } = require("../controller/image.js")
 const upload = require("../utils/upload.js")
@@ -13,6 +13,7 @@ route.get('/users', getUser)
 //conversation
 route.post('/conversation/c-add', newConversation)
 route.post('/conversation/c-get', getConversation)
+route.patch('/conversation/update', updateConversation)
 
 //messags
 route.post('/message/m-new', newMessage)
