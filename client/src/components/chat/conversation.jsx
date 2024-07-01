@@ -15,7 +15,8 @@ const ImageMessage = ({ message  }) => {
               <h6>{message.text.split("/").pop()}</h6>
             </div> :
             <div className='simple-img'>
-              <img src={'/images/' + message.text} alt={message.type} />
+              {/* <img src={'/images/' + message.text} alt={`${message.type} for multer disk storage`} /> */}
+              <img src={message.text} alt={`${message.type}for cloudinary`} />
             </div>
         }
         <div className='position-absolute img-time'>

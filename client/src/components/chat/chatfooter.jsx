@@ -1,13 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { UpdateConversation, newMessage, uploadFile } from '../../service/api'
 import AccountContext from '../../context/accoountcontext'
+import axios from 'axios'
 
 const ChatFooter = ({ conversation, setMessages }) => {
 
     const { account, person, socket , setRecenetMessage} = useContext(AccountContext)
     const [text, setText] = useState("")
-    const [image, setImage] = useState("")
+    const [file, setFile] = useState(null)
+    const [imageUrl, setImageUrl] = useState("")
     const [imageName, setImageName] = useState("")
+    const [imageUploading, setImageUploading] = useState(false)
     const [mobile, setMobile]= useState(false)
 
     function responsive(){
@@ -35,31 +38,59 @@ const ChatFooter = ({ conversation, setMessages }) => {
 
     const onFileChange = (e) => {
         e.preventDefault()
-        setImage(e.target.files[0])
+        setFile(e.target.files[0])
     }
 
     const uploadImage = async () => {
-        if (image) {
+        setImageUploading(true)
+        if (file) {
             const data = new FormData();
-            data.append("image", image);
+            data.append("image", file);
             // console.log(data.get("image"))
 
-            let response = await uploadFile(data);
+            // using normal multer disk storage
+            // let response = await uploadFile(data);
+            // if (response.imageName) {
+            //     setImageName(response.imageName);
+            //     if (imageName) {
+            //         setText({ text: imageName })
+            //     }
+            // } else {
+            //     console.error("Unexpected response format:", response);
+            // }
 
-            if (response.imageName) {
-                setImageName(response.imageName);
-                if (imageName) {
-                    setText({ text: imageName })
+            // using cloudinary online upload
+            try {
+                let response = await axios.post('http://localhost:8000/file/cloudinaryUpload', data, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                if (response.status === 200) {
+                    setImageName(response.data.originalName)
+                    setImageUrl(response.data.url)
+                    setText(response.data.originalName)
+                    console.log(text)
+                } else {
+                    console.error("Unexpected response format:", response);
                 }
-            } else {
-                console.error("Unexpected response format:", response);
+            } catch (error) {
+                console.error("Error uploading image:", error);
+            }finally{
+                setImageUploading(false)
             }
         }
     }
 
     useEffect(() => {
-        uploadImage()
-    }, [image])
+        if (file) {
+            uploadImage()
+        }
+    }, [file])
+
+    useEffect(()=>{
+        console.log(imageName, imageUrl)
+    }, [imageUrl, imageName])
 
     useEffect(() => {
     }, [conversation])
@@ -67,7 +98,7 @@ const ChatFooter = ({ conversation, setMessages }) => {
     const sendMessage = async () => {
         let message = {}
         if (conversation?._id) {
-            if (!imageName) {
+            if (!imageUrl && !imageName) {
                 message = {
                     conversationId: conversation._id,
                     senderId: account.sub,
@@ -81,7 +112,8 @@ const ChatFooter = ({ conversation, setMessages }) => {
                     senderId: account.sub,
                     recieverId: person.sub,
                     type: "file",
-                    text: imageName
+                    text: imageName,
+                    url : imageUrl
                 }
             }
         }
@@ -99,8 +131,9 @@ const ChatFooter = ({ conversation, setMessages }) => {
 
         if ((message.text && message.text.length > 0) || imageName) {
             setText("")
-            setImage("")
+            setFile(null)
             setImageName("")
+            setImageUrl("")
             await newMessage(message)
             const res = await UpdateConversation({senderId: account.sub, recieverId: person.sub, message : message.text})
             console.log(res)
@@ -119,8 +152,12 @@ const ChatFooter = ({ conversation, setMessages }) => {
 
     return (
         <>
-            {image && <img src={URL.createObjectURL(image)} />}
-            <div className="chatbox-footer position-static py-2 d-flex flex-row align-items-center">
+            {/* {file && <img src={URL.createObjectURL(file)} />} */}
+            {imageUploading ? 
+                <div style={{ fontSize: "20px", color: "red" }}>loading...</div> : 
+                imageUrl && <img className='uploadImage position-fixed' src={imageUrl} alt={imageName} />
+            }
+             <div className="chatbox-footer position-static py-2 d-flex flex-row align-items-center"> { imageUploading ? <div style={{fontSize:"300px"}} >'loading...'</div> : imageUrl && <img className='uploadImage position-fixed' src={imageUrl} />}
 
                 {!mobile &&
                     <div className='smile-icon icon py-1 mx-2 px-2 ms-3 d-flex justify-content-center align-items-center'>

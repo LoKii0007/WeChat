@@ -40,7 +40,7 @@ const LoginDialog = () => {
       <div className="conatiner">
         <div className="screen m-5">
           <div className="heading text-center">
-            <h1>Use WeChat on your computer</h1>
+            <h1>Chat with your frined online</h1>
           </div>
           <div className="body d-flex position-relative justify-content-center">
             <img className='d-flex justify-content-center' src="qr.webp" alt="" />

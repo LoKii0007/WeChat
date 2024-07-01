@@ -5,6 +5,7 @@ const wss = new WebSocket.Server({ port: 8080 });
 let activeUsers = []
 
 wss.on("connection", function connection(ws) {
+  console.log('connected to websocket server on 8080')
 
   ws.on("error", console.error);
 
@@ -33,9 +34,9 @@ wss.on("connection", function connection(ws) {
     if(message.type === 'message_sent'){
     
       const receiver = activeUsers.find(user => user.person.sub === message.payload.receiver)
-      console.log(receiver.person.email)
 
       if(receiver){
+        console.log(receiver?.person?.email)
         receiver.socket.send(JSON.stringify({
           type : 'update_receiver',
           payload : {

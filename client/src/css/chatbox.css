@@ -93,6 +93,12 @@ chatbox-form-control:focus{
     text-align: center;
 }
 
+.uploadImage{
+    width: 200px;
+    z-index: 99999;
+    bottom: 0%;
+}
+
 .send-icon{
     /* background-color: #A1EEBD; */
     font-size: 20px;
