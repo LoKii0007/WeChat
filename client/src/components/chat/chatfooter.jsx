@@ -5,6 +5,9 @@ import axios from 'axios'
 
 const ChatFooter = ({ conversation, setMessages }) => {
 
+    const backUrl = 'https://we-chat-ten.vercel.app/file/cloudinaryUpload'
+    // const backUrl = 'http://localhost:8000/file/cloudinaryUpload'
+
     const { account, person, socket , setRecenetMessage} = useContext(AccountContext)
     const [text, setText] = useState("")
     const [file, setFile] = useState(null)
@@ -61,7 +64,7 @@ const ChatFooter = ({ conversation, setMessages }) => {
 
             // using cloudinary online upload
             try {
-                let response = await axios.post('http://localhost:8000/file/cloudinaryUpload', data, {
+                let response = await axios.post(backUrl, data, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
@@ -90,7 +93,7 @@ const ChatFooter = ({ conversation, setMessages }) => {
 
     useEffect(()=>{
         console.log(imageName, imageUrl)
-    }, [imageUrl, imageName])
+    }, [imageUrl, imageName, imageUploading])
 
     useEffect(() => {
     }, [conversation])
@@ -155,7 +158,7 @@ const ChatFooter = ({ conversation, setMessages }) => {
             {/* {file && <img src={URL.createObjectURL(file)} />} */}
             {imageUploading ? 
                 <div style={{ fontSize: "20px", color: "red" }}>loading...</div> : 
-                imageUrl && <img className='uploadImage position-fixed' src={imageUrl} alt={imageName} />
+                imageUrl.length>0 && <img className='uploadImage position-fixed' src={imageUrl} alt={imageName} />
             }
              <div className="chatbox-footer position-static py-2 d-flex flex-row align-items-center"> { imageUploading ? <div style={{fontSize:"300px"}} >'loading...'</div> : imageUrl && <img className='uploadImage position-fixed' src={imageUrl} />}
 
