@@ -2,18 +2,26 @@ const mongoose = require("mongoose")
 
 const messageSchema = new mongoose.Schema({
     conversationId:{
-        type:String
+        type:String,
+        require : true
     },
     senderId:{
-        type: String
+        type: String,
+        require : true
     },
     recieverId:{
-        type: String
+        type: String,
+        require : true
     },
     text:{
-        type: String
+        type: String,
+        require : true
     },
     type:{
+        type: String,
+        require : true
+    },
+    url:{
         type: String
     }
 },{

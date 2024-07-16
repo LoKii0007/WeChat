@@ -30,7 +30,7 @@ route.get("/message/m-get/:id", getMessage);
 route.post("/file/upload", upload.single("image"), uploadFile);
 route.get("/file/:filename", getImage);
 route.post("/file/cloudinaryUpload", cloudinaryUpload.single("image"), (req, res) => {
-  console.log(req.file)
+  // console.log(req.file)
   try {
     if(req.file){
         return res.status(200).json({

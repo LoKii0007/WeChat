@@ -1,105 +1,87 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { UpdateConversation, newMessage, uploadFile } from '../../service/api'
-import AccountContext from '../../context/accoountcontext'
-import axios from 'axios'
+import React, { useContext, useEffect, useState } from 'react';
+import { UpdateConversation, newMessage } from '../../service/api';
+import AccountContext from '../../context/accoountcontext';
+import axios from 'axios';
 
 const ChatFooter = ({ conversation, setMessages }) => {
-
     const backUrl = 'https://we-chat-ten.vercel.app/file/cloudinaryUpload'
-    // const backUrl = 'http://localhost:8000/file/cloudinaryUpload'
+    // const backUrl = 'http://localhost:8000/file/cloudinaryUpload';
+    const { account, person, socket, setRecenetMessage } = useContext(AccountContext);
 
-    const { account, person, socket , setRecenetMessage} = useContext(AccountContext)
-    const [text, setText] = useState("")
-    const [file, setFile] = useState(null)
-    const [imageUrl, setImageUrl] = useState("")
-    const [imageName, setImageName] = useState("")
-    const [imageUploading, setImageUploading] = useState(false)
-    const [mobile, setMobile]= useState(false)
+    const [text, setText] = useState("");
+    const [file, setFile] = useState(null);
+    const [imageUrl, setImageUrl] = useState("");
+    const [imageName, setImageName] = useState("");
+    const [imageUploading, setImageUploading] = useState(false);
+    const [mobile, setMobile] = useState(false);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState('');
 
-    function responsive(){
-      if(window.innerWidth>600){
-        setMobile(false)
-      }else{
-        setMobile(true)
-      }
+    function responsive() {
+        if (window.innerWidth > 600) {
+            setMobile(false);
+        } else {
+            setMobile(true);
+        }
     }
-  
-    useEffect(()=>{
-      responsive()
-  
-      window.addEventListener('resize', responsive)
-    
-      return()=>{
-        window.removeEventListener('resize', responsive)
-      }
-    }, [])
+
+    useEffect(() => {
+        responsive();
+        window.addEventListener('resize', responsive);
+        return () => {
+            window.removeEventListener('resize', responsive);
+        };
+    }, []);
 
     const onChange = (e) => {
-        e.preventDefault()
-        setText(e.target.value)
-    }
+        setText(e.target.value);
+    };
 
     const onFileChange = (e) => {
-        e.preventDefault()
-        setFile(e.target.files[0])
-    }
+        const selectedFile = e.target.files[0];
+        setFile(selectedFile);
+        const previewUrl = URL.createObjectURL(selectedFile);
+        setImagePreviewUrl(previewUrl);
+    };
 
     const uploadImage = async () => {
-        setImageUploading(true)
+        setImageUploading(true);
         if (file) {
             const data = new FormData();
             data.append("image", file);
-            // console.log(data.get("image"))
-
-            // using normal multer disk storage
-            // let response = await uploadFile(data);
-            // if (response.imageName) {
-            //     setImageName(response.imageName);
-            //     if (imageName) {
-            //         setText({ text: imageName })
-            //     }
-            // } else {
-            //     console.error("Unexpected response format:", response);
-            // }
-
-            // using cloudinary online upload
             try {
                 let response = await axios.post(backUrl, data, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
-                })
+                });
                 if (response.status === 200) {
-                    setImageName(response.data.originalName)
-                    setImageUrl(response.data.url)
-                    setText(response.data.originalName)
-                    console.log(text)
+                    setImageName(response.data.originalName);
+                    setImageUrl(response.data.url);
+                    if (!text) setText(response.data.originalName);  // Set text only if it's empty
                 } else {
                     console.error("Unexpected response format:", response);
                 }
             } catch (error) {
                 console.error("Error uploading image:", error);
-            }finally{
-                setImageUploading(false)
             }
+            setImageUploading(false);
         }
-    }
+    };
 
     useEffect(() => {
         if (file) {
-            uploadImage()
+            uploadImage();
         }
-    }, [file])
-
-    useEffect(()=>{
-        console.log(imageName, imageUrl)
-    }, [imageUrl, imageName, imageUploading])
+    }, [file]);
 
     useEffect(() => {
-    }, [conversation])
+        console.log(imageName, imageUrl);
+    }, [imageUrl, imageName, imageUploading]);
+
+    useEffect(() => { }, [conversation]);
 
     const sendMessage = async () => {
-        let message = {}
+        let message = {};
         if (conversation?._id) {
             if (!imageUrl && !imageName) {
                 message = {
@@ -108,7 +90,7 @@ const ChatFooter = ({ conversation, setMessages }) => {
                     recieverId: person.sub,
                     type: "text",
                     text: text
-                }
+                };
             } else {
                 message = {
                     conversationId: conversation._id,
@@ -116,8 +98,8 @@ const ChatFooter = ({ conversation, setMessages }) => {
                     recieverId: person.sub,
                     type: "file",
                     text: imageName,
-                    url : imageUrl
-                }
+                    url: imageUrl
+                };
             }
         }
 
@@ -128,71 +110,74 @@ const ChatFooter = ({ conversation, setMessages }) => {
                 receiver: person.sub,
                 newMessage: message
             }
-        }))
+        }));
 
-        setMessages(prev => [...prev, message])
+        setMessages(prev => [...prev, message]);
 
         if ((message.text && message.text.length > 0) || imageName) {
-            setText("")
-            setFile(null)
-            setImageName("")
-            setImageUrl("")
-            await newMessage(message)
-            const res = await UpdateConversation({senderId: account.sub, recieverId: person.sub, message : message.text})
-            console.log(res)
-            if(res!= undefined){
-                setRecenetMessage(res)
+            setText("");
+            setFile(null);
+            setImageName("");
+            setImageUrl("");
+            await newMessage(message);
+            const res = await UpdateConversation({ senderId: account.sub, recieverId: person.sub, message: message.text });
+            if (res != undefined) {
+                setRecenetMessage(res);
             }
         }
-    }
+    };
 
     const handleKeyDown = (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault()
-            sendMessage()
+        if (e.key === "Enter" && text.length > 0) {
+            sendMessage();
         }
-    }
+    };
 
     return (
         <>
-            {/* {file && <img src={URL.createObjectURL(file)} />} */}
-            {imageUploading ? 
-                <div style={{ fontSize: "20px", color: "red" }}>loading...</div> : 
-                imageUrl.length>0 && <img className='uploadImage position-fixed' src={imageUrl} alt={imageName} />
+            {imageName &&
+                <div className='uploadImage' >
+                    <img className='' src={`${imageUrl}`} alt={imageName} />
+                </div>
             }
-             <div className="chatbox-footer position-static py-2 d-flex flex-row align-items-center"> { imageUploading ? <div style={{fontSize:"300px"}} >'loading...'</div> : imageUrl && <img className='uploadImage position-fixed' src={imageUrl} />}
+
+            {/* <div className='uploadImage' >
+                <img className='' src='/emptychst.png' alt={imageName} />
+            </div> */}
+
+            <div className="chatbox-footer position-static py-2 d-flex flex-row align-items-center">
 
                 {!mobile &&
                     <div className='smile-icon icon py-1 mx-2 px-2 ms-3 d-flex justify-content-center align-items-center'>
-                        <i class="fa-regular fa-face-smile"></i>
+                        <i className="fa-regular fa-face-smile"></i>
                     </div>
                 }
 
                 <label htmlFor="plus-icon">
                     <div className='plus-icon icon ms-2 p-2 d-flex justify-content-center align-items-center'>
-                        <i class="fa-solid fa-plus"></i>
+                        <i className="fa-solid fa-plus"></i>
                     </div>
                 </label>
-                <input id='plus-icon' type="file" style={{ display: "none" }} onChange={(e) => onFileChange(e)} />
+                <input id='plus-icon' type="file" style={{ display: "none" }} onChange={onFileChange} />
 
                 <div className='chatbox-input mx-2 rounded-pill'>
                     <form className="d-flex align-items-center rounded-pill">
-                        <input onKeyDown={(e) => handleKeyDown(e)} onChange={(e) => onChange(e)} value={text} className="form-control chatbox-form-control rounded-pill me-2" type="text" placeholder="Type a message" />
-                        <div onClick={() => sendMessage()} className='icon send-icon rounded-circle py-1 px-3' >
-                            <i class="fa-regular fa-paper-plane"></i>
-                        </div>
+                        <input onKeyDown={handleKeyDown} onChange={onChange} value={text} className="form-control chatbox-form-control rounded-pill me-2" type="text" placeholder="Type a message" />
+                        <button disabled={!imageName && !text} onClick={sendMessage} className='icon send-icon rounded-circle py-1 px-3' >
+                            <i className="fa-regular fa-paper-plane"></i>
+                        </button>
                     </form>
                 </div>
 
                 {!mobile &&
                     <div className='mic-icon icon py-1 px-2 me-4 d-flex justify-content-center align-items-center'>
-                        <i class="fa-solid fa-microphone"></i>
+                        <i className="fa-solid fa-microphone"></i>
                     </div>
                 }
 
             </div>
         </>
-    )
-}
+    );
+};
 
-export default ChatFooter
+export default ChatFooter;
