@@ -101,7 +101,7 @@ const ChatBox = () => {
                                 {person.name}
                             </div>
                             <div className="header-profile-status">
-                                {activeUsers.length>0 && activeUsers.find(user => user.person.sub === person.sub) ? "online" : "offline"}
+                                {activeUsers.length>0 && activeUsers.find(user => user.person.sub === person.sub) ? <span style={{color:'green'}} >online</span> : "offline"}
                             </div>
                         </div>
                     </div>

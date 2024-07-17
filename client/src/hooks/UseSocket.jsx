@@ -6,7 +6,8 @@ export default function UseSocket() {
 
     useEffect(() => {
 
-        const ws = new WebSocket("ws://localhost:8080")
+        // const ws = new WebSocket("ws://localhost:8080")
+        const ws = new WebSocket("wss://wechat-1-0.onrender.com/")
 
         ws.onopen = () => {
             console.log("connected to websocket")
