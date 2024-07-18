@@ -34,20 +34,20 @@ const ChatMenu = () => {
         fetchdata()
     }, [text])
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (!socket) {
-            return
-        }
-        socket.onmessage = (event) => {
-            const message = JSON.parse(event.data)
-            if (message.type === 'activeUsers') {
-                setActiveUsers(message.payload)
-                console.log('active users : ', activeUsers.length)
-            }
-        }
+    //     if (!socket) {
+    //         return
+    //     }
+    //     socket.onmessage = (event) => {
+    //         const message = JSON.parse(event.data)
+    //         if (message.type === 'activeUsers') {
+    //             setActiveUsers(message.payload)
+    //             console.log('active users : ', activeUsers.length)
+    //         }
+    //     }
 
-    }, [activeUsers])
+    // }, [activeUsers])
 
     const handleEllipsis = () => {
 

@@ -53,15 +53,22 @@ const ChatBox = () => {
             const data = JSON.parse(event.data)
             if(data.type === 'update_receiver'){
                 console.log('recieved :', data.payload)
-                setMessages(prevMessages => [...prevMessages, data.payload.newMessage])
+                // setMessages(prevMessages => [...prevMessages, data.payload.newMessage])
+                setMessages((prev)=>{
+                    const updatedMessages = [...prev, data.payload.newMessage]
+                    return updatedMessages
+                })
             }
             if (data.type === 'activeUsers') {
                 console.log(data.payload.length)
                 setActiveUsers(data.payload)
-                console.log('active users : ', activeUsers)
             }
         }
-    }, [socket, setActiveUsers])
+    }, [socket])
+
+    useEffect(()=>{
+       console.log('active users : ', activeUsers)
+    }, [activeUsers])
 
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -101,7 +108,7 @@ const ChatBox = () => {
                                 {person.name}
                             </div>
                             <div className="header-profile-status">
-                                {activeUsers.length>0 && activeUsers.find(user => user.person.sub === person.sub) ? <span style={{color:'green'}} >online</span> : "offline"}
+                                {activeUsers.length>0 && activeUsers.find(user => user === person.sub) ? <span style={{color:'green'}} >online</span> : "offline"}
                             </div>
                         </div>
                     </div>
