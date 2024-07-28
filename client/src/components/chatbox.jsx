@@ -61,7 +61,10 @@ const ChatBox = () => {
             }
             if (data.type === 'activeUsers') {
                 console.log(data.payload.length)
-                setActiveUsers(data.payload)
+                setActiveUsers(()=>{
+                    const active = data.payload
+                    return active
+                })
             }
         }
     }, [socket])
