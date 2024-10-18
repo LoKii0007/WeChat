@@ -31,7 +31,7 @@ const ChatDialog = ({ user }) => {
 
   useEffect(() => {
     getConvoDetails()
-    console.log(message)
+    // console.log(message)
   }, [newconvo, recentMessage])
 
   // reponsiveness
@@ -59,14 +59,14 @@ const ChatDialog = ({ user }) => {
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data)
       if (data.type === 'update_receiver') {
-        console.log('recieved :', data.payload)
+        // console.log('recieved :', data.payload)
         getConvoDetails()
       }
     }
   }, [socket])
 
   useEffect(() => {
-    console.log(message)
+    // console.log(message)
   }, [message])
 
   return (

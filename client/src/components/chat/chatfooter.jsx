@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { UpdateConversation, newMessage } from '../../service/api';
 import AccountContext from '../../context/accoountcontext';
 import axios from 'axios';
+import toast from 'react-hot-toast'
 
 const ChatFooter = ({ conversation, setMessages }) => {
     const backUrl = 'https://we-chat-ten.vercel.app/file/cloudinaryUpload'
@@ -59,10 +60,12 @@ const ChatFooter = ({ conversation, setMessages }) => {
                     setImageUrl(response.data.url);
                     if (!text) setText(response.data.originalName);  // Set text only if it's empty
                 } else {
-                    console.error("Unexpected response format:", response);
+                    // console.error("Unexpected response format:", response);
+                    toast.error('something went wrong')
                 }
             } catch (error) {
-                console.error("Error uploading image:", error);
+                // console.error("Error uploading image:", error);
+                toast.error('something went wrong')
             }
             setImageUploading(false);
         }
@@ -80,7 +83,13 @@ const ChatFooter = ({ conversation, setMessages }) => {
 
     useEffect(() => { }, [conversation]);
 
-    const sendMessage = async () => {
+    const sendMessage = async (e) => {
+        e.preventDefault()
+        if(!socket){
+            toast.error('something went wrong')
+            // console.log('some error occured')
+            return
+        }
         let message = {};
         if (conversation?._id) {
             if (!imageUrl && !imageName) {
@@ -163,7 +172,7 @@ const ChatFooter = ({ conversation, setMessages }) => {
                 <div className='chatbox-input mx-2 rounded-pill'>
                     <form className="d-flex align-items-center rounded-pill">
                         <input onKeyDown={handleKeyDown} onChange={onChange} value={text} className="form-control chatbox-form-control rounded-pill me-2" type="text" placeholder="Type a message" />
-                        <button disabled={!imageName && !text} onClick={sendMessage} className='icon send-icon rounded-circle py-1 px-3' >
+                        <button disabled={!imageName && !text} onClick={(e)=>sendMessage(e)} className='icon send-icon rounded-circle py-1 px-3' >
                             <i className="fa-regular fa-paper-plane"></i>
                         </button>
                     </form>

@@ -4,6 +4,7 @@ import Drawer from '../components/drawer'
 import "../css/chats.css"
 import { getUsers } from '../service/api'
 import AccountContext from '../context/accoountcontext'
+import toast from 'react-hot-toast'
 
 const ChatMenu = () => {
     const [users, setUsers] = useState([])
@@ -24,10 +25,12 @@ const ChatMenu = () => {
                     setUsers(filteredData)
                 } else {
                     console.log("invalid response", response)
+                    toast.error('something went wrong')
                 }
             }
             catch (error) {
-                console.log("error ", error)
+                // console.log("error ", error)
+                toast.error('something went wrong')
             }
         }
 

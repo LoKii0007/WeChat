@@ -3,6 +3,7 @@ import { GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from "jwt-decode"
 import AccountContext from '../context/accoountcontext'
 import { adduser } from '../service/api'
+import toast from 'react-hot-toast'
 import '../css/logindialog.css'
 
 const LoginDialog = () => {
@@ -17,15 +18,17 @@ const LoginDialog = () => {
         type: 'addUser',
         payload: decoded
       }));
-      console.log('Message sent');
+      // console.log('Message sent')
     } else {
-      console.log('WebSocket is not open');
+      // console.log('WebSocket is not open')
+      toast.error('something went wrong')
     }
     await adduser(decoded)
   }
 
   const loginError = () => {
     console.log("login failed")
+    toast.error('something went wrong')
   }
 
   return (

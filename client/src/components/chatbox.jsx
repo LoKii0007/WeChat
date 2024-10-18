@@ -4,6 +4,8 @@ import { getConversation, getMessage } from '../service/api'
 import Conversation from './chat/conversation'
 import ChatFooter from './chat/chatfooter'
 import "../css/chatbox.css"
+import toast from 'react-hot-toast'
+
 
 const ChatBox = () => {
 
@@ -33,7 +35,7 @@ const ChatBox = () => {
                 setMsgLoading(false)
             }
             else {
-                console.log("no messages")
+                // console.log("no messages")
             }
         }
     }
@@ -52,7 +54,7 @@ const ChatBox = () => {
         socket.onmessage =(event)=>{
             const data = JSON.parse(event.data)
             if(data.type === 'update_receiver'){
-                console.log('recieved :', data.payload)
+                // console.log('recieved :', data.payload)
                 // setMessages(prevMessages => [...prevMessages, data.payload.newMessage])
                 setMessages((prev)=>{
                     const updatedMessages = [...prev, data.payload.newMessage]
@@ -60,7 +62,7 @@ const ChatBox = () => {
                 })
             }
             if (data.type === 'activeUsers') {
-                console.log(data.payload.length)
+                // console.log(data.payload.length)
                 setActiveUsers(()=>{
                     const active = data.payload
                     return active
@@ -70,7 +72,7 @@ const ChatBox = () => {
     }, [socket])
 
     useEffect(()=>{
-       console.log('active users : ', activeUsers)
+    //    console.log('active users : ', activeUsers)
     }, [activeUsers])
 
     useEffect(() => {
